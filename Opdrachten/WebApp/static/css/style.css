@@ -1,0 +1,16 @@
+body > header {
+	position:absolute;
+	top:0;
+}
+
+#content{
+	margin-top:4em;
+}
+
+section{
+	display: none;
+}
+
+section.active{
+	display: block;
+}
