@@ -7,32 +7,59 @@
         <title>My Favorite Movies</title>
         <link rel="stylesheet" href="static/css/style.css">
         <link rel="author" href="humans.txt">
+
     </head>
     <body>
 		<main id="content">
+
 			<section id="about" data-route="about">
 					<header>
-						<h1 data-bind="title"></h1>
-						<div class="description">
-							<p class="p"></p>
+						<h1 data-name="title"></h1>
+						<div data-name="description">
+							<p data-name="paragraph"></p>
 						</div>
 					</header>
 			</section>
 
-			<section id="movies" data-route="movies"> 
-				<h1 data-bind="title"></h1> 
-				<div class="moviesContent"> 
-					<article> 
-						<header> 
-							<h1 class= "title"></h1> 
-							<em class="titleReleasedate"><time class="releaseDate"></time></em> 
-						</header> <figure class="imgBox"> <img class="cover"> </figure> 
-						<p class="description"></p> 
-					</article> 
-				</div> 
+			<section id="movie" data-route="movie">
+				<h1 data-name="title"></h1>
 			</section>
+
+		<section data-route="movies" id="movies">
+	        <article>
+	            <header>
+	                <h1 data-name="title"></h1>
+	                <h2 data-bind="reviews">Review score: <span data-bind="movies.reviews"></span></h2>
+	                <em>Release date: <time data-name="release_date"></time></em>
+	            </header>
+
+	            <figure>
+	                <img src="" alt="" data-name="cover">
+	            </figure>
+
+	            <p data-name="plot"></p>
+
+	            <section id="actors">
+	                <h1>Actors</h1>
+	                <div data-name="actors">
+	                    <article>
+	                        <figure>
+	                            <img src="" alt="" data-name="url_photo">
+	                        </figure>
+	                        <header>
+	                            <a href="" data-name="url_character"><h1 data-name="character"></h1></a>
+	                            Actor name: <a href="" data-name="url_profile"><h2 data-name="actor_name"></h2></a>
+	                        </header>
+	                    </article>
+	                    <div class="clear"></div>
+	                </div>
+	            </section>
+
+	        </article>
+	    </section>
+
 		</main>
-		
+
 		<header>
 			<nav>
 				<ul>
@@ -41,8 +68,11 @@
 				</ul>
 			</nav>
 		</header>
+
+
 		<script src="static/js/vendor/transparency.min.js"></script>
 		<script src="static/js/vendor/routie.js"></script>
-        <script src="static/js/app.js"></script>
+		<script src="static/js/vendor/underscore-min.js"></script>
+		<script src="static/js/app.js"></script>
     </body>
 </html>
