@@ -52,7 +52,7 @@ var app = app || {};
 		movieTitle :{title:"Movies"},
 
 		movieReviews: {},
-		movies: {}
+		movies: localStorage.getItem('films'),
 	}
     
     app.manipulatieData =  {
@@ -66,18 +66,20 @@ var app = app || {};
                         movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
 
                 console.log(movie.reviews)
+
                 })  
-         return data;
-        },
-    },
+        return data;
+        }
+    }
 
 	app.sections = {
 
 		init: function() {
+            app.manipulatieData.reviewData();
 			app.sections.about();
 			app.sections.movies();
 			app.sections.toggle();
-			app.manipulatieData.reviewData();
+			
 		},
 
 		about: function() {
