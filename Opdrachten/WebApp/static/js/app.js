@@ -66,9 +66,13 @@ var app = app || {};
                         movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
 
                 console.log(movie.reviews)
-
+                return movie;
                 })  
+        console.log(data)
+        app.content.movies = data;
+        console.log(app.content.movies)
         return data;
+         
         }
     }
 
@@ -90,7 +94,7 @@ var app = app || {};
 			var self = this;
 
 			if(localStorage.getItem('films')){
-				Transparency.render(document.getElementById('movies'), JSON.parse(localStorage.getItem('films')), app.config.directives);
+				Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
 				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
 			}
 			else{
