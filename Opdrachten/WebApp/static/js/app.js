@@ -61,7 +61,7 @@ var app = app || {};
 			app.sections.about();
 			app.sections.movies();
 			app.sections.toggle();
-			app.sections.manipulateData();
+			manipulatieData.reviewData();
 		},
 
 		about: function() {
@@ -76,7 +76,7 @@ var app = app || {};
 				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
 			}
 			else{
-							app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
+				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
 
 			}
 
@@ -100,21 +100,6 @@ var app = app || {};
 			localStorage.setItem('movieData', text);
 		},
 
-		manipulateData: function() {
-
-            var data = JSON.parse(localStorage.getItem('movieData'));
-
-            //map reduce
-            _.map(data, function (movie, i){
-                    movies.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
-                    //movie.directors = _.reduce(movie.directors, function(memo, director){ return memo + director.name + ' '; }, '');
-                    //movie.actors    = _.reduce(movie.actors,    function(memo, actor){    return memo + actor.actor_name + ', ';}, '');
-                    //return movie;
-                    console.log(movies.reviews)
-                })  
-            return data;
-        },
-
 		toggle: function(section) {
 			if (section == "about") {
 				document.querySelector('#about').classList.add('active');
@@ -130,6 +115,22 @@ var app = app || {};
 
 	}
 
+    manipulatieData =  {
+                reviewData: function() {
+                    console.log("manipulate review scores")
+                    // get data
+                    var data = JSON.parse(localStorage.getItem('movieData'));
+
+                    //map reduce
+                    _.map(data, function (movie, i) {
+                            movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
+                    
+                    console.log(movie.reviews)
+                    })  
+             return data;
+            },
+        },
+    
 	app.config = {
 		init: function() {
             this.transparency();
