@@ -54,6 +54,22 @@ var app = app || {};
 		movieReviews: {},
 		movies: {}
 	}
+    
+    app.manipulatieData =  {
+            reviewData: function() {
+                console.log("manipulate review scores")
+                // get data
+                var data = JSON.parse(localStorage.getItem('films'));
+
+                //map reduce
+                _.map(data, function (movie, i) {
+                        movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
+
+                console.log(movie.reviews)
+                })  
+         return data;
+        },
+    },
 
 	app.sections = {
 
@@ -61,7 +77,7 @@ var app = app || {};
 			app.sections.about();
 			app.sections.movies();
 			app.sections.toggle();
-			manipulatieData.reviewData();
+			app.manipulatieData.reviewData();
 		},
 
 		about: function() {
@@ -71,8 +87,8 @@ var app = app || {};
 		movies: function() {
 			var self = this;
 
-			if(localStorage.getItem('movieData')){
-				Transparency.render(document.getElementById('movies'), JSON.parse(localStorage.getItem('movieData')), app.config.directives);
+			if(localStorage.getItem('films')){
+				Transparency.render(document.getElementById('movies'), JSON.parse(localStorage.getItem('films')), app.config.directives);
 				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
 			}
 			else{
@@ -97,7 +113,7 @@ var app = app || {};
 			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
 			Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
 
-			localStorage.setItem('movieData', text);
+			localStorage.setItem('films', text);
 		},
 
 		toggle: function(section) {
@@ -114,22 +130,6 @@ var app = app || {};
 		}
 
 	}
-
-    manipulatieData =  {
-                reviewData: function() {
-                    console.log("manipulate review scores")
-                    // get data
-                    var data = JSON.parse(localStorage.getItem('movieData'));
-
-                    //map reduce
-                    _.map(data, function (movie, i) {
-                            movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
-                    
-                    console.log(movie.reviews)
-                    })  
-             return data;
-            },
-        },
     
 	app.config = {
 		init: function() {
