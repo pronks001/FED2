@@ -52,7 +52,7 @@ var app = app || {};
 		movieTitle :{title:"Movies"},
 
 		movieReviews: {},
-		movies: localStorage.getItem('films'),
+		movies: {},
 	}
     
     app.manipulatieData =  {
@@ -60,15 +60,13 @@ var app = app || {};
                 console.log("manipulate review scores")
                 // get data
                 var data = JSON.parse(localStorage.getItem('films'));
-
                 //map reduce
                 _.map(data, function (movie, i) {
-                        movie.reviews   = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
+                        movie.reviews = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
 
                 console.log(movie.reviews)
                 return movie;
                 })  
-        console.log(data)
         app.content.movies = data;
         console.log(app.content.movies)
         return data;
