@@ -162,7 +162,7 @@ var app = app || {};
             id = parseInt(id);
             
             var movie = _.findWhere(movies, {id: id});
-            
+            console.log(movie);
             document.getElementById('detail').classList.add('active');
             Transparency.render(document.getElementById('detail'), movie, app.config.directives);
         },
@@ -200,13 +200,33 @@ var app = app || {};
 			      	return this.cover;
 			    }
 		  	},
-            
+            reviews: {
+                text: function(){                       
+                    if(isNaN(this.reviews)){
+                        return 'No reviewscore available';
+                    } else {
+                        return this.reviews;
+                    }
+                }
+            },
             readMore:{
                 href: function(params) {
                     return '#movies/' + this.id;
                 }
+            },
+            actors:{
+                url_profile: {
+                    href: function(params) {
+                        return this.url_profile;
+                    }
+                },
+                
+                url_character:{
+                    href:function(params) {
+                        return this.url_character;
+                    }                        
+                }
             }
-            
 		},
 
 		xhr: {
