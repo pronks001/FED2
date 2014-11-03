@@ -4,13 +4,13 @@ body > header {
 }
 
 #content{
-	margin-top:4em;
+	margin-top:12em;
 }
 
 section{
 	display: none;
 }
 
-section.active{
+.active{
 	display: block;
 }

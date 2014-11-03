@@ -22,8 +22,18 @@ var app = app || {};
 			    },
 			    'movies': function() {
 			    	console.log("Movies");
-					app.sections.toggle("movies");
-			    }
+					app.sections.movies();
+			    },
+                'movies/genre/:genre':function(genre){
+                    console.log("Genre: " + genre);
+                    app.sections.moviesByGenre(genre);
+                },
+                
+                'movies/:id': function(id){
+                    console.log("details page of movie " + id);
+                    app.sections.movieDetail(id);
+                }
+                
 			});
 		}
 
@@ -55,6 +65,12 @@ var app = app || {};
 		movies: {},
 	}
     
+    app.hideAllSections = function() {
+        _.each(document.getElementsByClassName("section"), function(el){
+            el.classList.remove('active'); 
+        });
+    }
+    
     app.manipulatieData =  {
             reviewData: function() {
                 console.log("manipulate review scores")
@@ -85,12 +101,16 @@ var app = app || {};
 		},
 
 		about: function() {
-			Transparency.render(document.getElementById('about'), app.content.about);
+			app.hideAllSections();
+            Transparency.render(document.getElementById('about'), app.content.about);
 		},
 
 		movies: function() {
-			var self = this;
+			app.hideAllSections();
+            var self = this;
 
+            document.getElementById('movies').classList.add('active');
+            
 			if(localStorage.getItem('films')){
 				Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
 				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
@@ -107,18 +127,45 @@ var app = app || {};
 		},
 
 		moviesSucces: function(text) {
+            app.hideAllSections();
 			console.log('Parsed data', JSON.parse(text));
 			app.content.movies = JSON.parse(text);
 			console.log('Data from data object', app.content.movies);
-			
-			//underscore_js
-
 
 			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
 			Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
 
 			localStorage.setItem('films', text);
 		},
+        
+        moviesByGenre:function(genre){
+            app.hideAllSections();
+            document.getElementById('movies').classList.add('active');
+            
+            var movies = app.content.movies;
+            
+            var filteredMovies = _.filter(movies, function(movie){
+                for(var i=0; i<movie.genres.length; i++){
+                    if(movie.genres[i] == genre) return true;
+                }
+                return false;
+            });
+            
+            Transparency.render(document.getElementById('movies'), filteredMovies, app.config.directives);
+        },
+        
+        movieDetail: function(id){
+            app.hideAllSections();
+            
+            var movies = app.content.movies;
+            
+            id = parseInt(id);
+            
+            var movie = _.findWhere(movies, {id: id});
+            
+            document.getElementById('detail').classList.add('active');
+            Transparency.render(document.getElementById('detail'), movie, app.config.directives);
+        },
 
 		toggle: function(section) {
 			if (section == "about") {
@@ -152,7 +199,14 @@ var app = app || {};
 			    src: function(params) {
 			      	return this.cover;
 			    }
-		  	}
+		  	},
+            
+            readMore:{
+                href: function(params) {
+                    return '#movies/' + this.id;
+                }
+            }
+            
 		},
 
 		xhr: {

@@ -12,7 +12,7 @@
     <body>
 		<main id="content">
 
-			<section id="about" data-route="about">
+			<section class="section" id="about" data-route="about">
 					<header>
 						<h1 data-name="title"></h1>
 						<div data-name="description">
@@ -21,15 +21,15 @@
 					</header>
 			</section>
 
-			<section id="movie" data-route="movie">
+			<section class="section" id="movie" data-route="movie">
 				<h1 data-name="title"></h1>
 			</section>
 
-		<section data-route="movies" id="movies">
+		<section class="section" data-route="movies" id="movies">
 	        <article>
 	            <header>
 	                <h1 data-name="title"></h1>
-	                <h2>Gemiddelde score: <span data-name="reviews"></span></h2>
+	                <h2>Score: <span data-name="reviews"></span></h2>
 	                <em>Release date: <time data-name="release_date"></time></em>
 	            </header>
 
@@ -38,9 +38,25 @@
 	            </figure>
 
 	            <p data-name="plot"></p>
+                
+                <p><a href="" data-name="readMore">Read More</a></p>
+                
+            </article>
+	    </section>
+                <section class="section" id="detail">
+                    <h1 data-bind="title"></h1>
+                        <header>
+	                <h1 data-name="title"></h1>
+	                <h2>Score: <span data-name="reviews"></span></h2>
+	                <em>Release date: <time data-name="release_date"></time></em>
+	            </header>
 
-	            <section id="actors">
-	                <h1>Actors</h1>
+	            <figure>
+	                <img src="" alt="" data-name="cover">
+	            </figure>
+
+	            <p data-name="plot"></p>
+                
 	                <div data-name="actors">
 	                    <article>
 	                        <figure>
@@ -53,10 +69,9 @@
 	                    </article>
 	                    <div class="clear"></div>
 	                </div>
-	            </section>
+                </section>
 
-	        </article>
-	    </section>
+
 
 		</main>
 
@@ -65,6 +80,12 @@
 				<ul>
 					<li><a href="#about">About</a></li>
 					<li><a href="#movies">Movies</a></li>
+                        <h2>Genre:</h2>
+                        <ul>
+                            <li><a href="#movies/genre/Horror">Horror</a></li>
+                            <li><a href="#movies/genre/Drama">Drama</a></li>
+                            <li><a href="#movies/genre/Thriller">Thriller</a></li>
+                        </ul>
 				</ul>
 			</nav>
 		</header>
