@@ -21,28 +21,46 @@
 					</header>
 			</section>
 
-			<section class="section" id="movie" data-route="movie">
-				<h1 data-name="title"></h1>
-			</section>
+				<section id="movies" class="section" data-route="movies" >
+					<nav class="genre-filter">
+						<div id="pan-filter">
+							<h2>Genre:</h2>
+								<ul>
+									<li><a href="#movies/genre/Action">Action</a></li>
+									<li><a href="#movies/genre/Adventure">Adventure</a></li>
+									<li><a href="#movies/genre/Crime">Crime</a></li>
+									<li><a href="#movies/genre/Drama">Drama</a></li>
+									<li><a href="#movies/genre/Horror">Horror</a></li>
+									<li><a href="#movies/genre/Thriller">Thriller</a></li>
+								</ul>
+						</div>
+					</nav>
+					
+					<article>
+						<header>
+							<h1 data-name="title"></h1>
+							<h2>Score: <span data-name="reviews"></span></h2>
+							<em>Release date: <time data-name="release_date"></time></em>
+						</header>
 
-		<section class="section" data-route="movies" id="movies">
-	        <article>
-	            <header>
-	                <h1 data-name="title"></h1>
-	                <h2>Score: <span data-name="reviews"></span></h2>
-	                <em>Release date: <time data-name="release_date"></time></em>
-	            </header>
-
-	            <figure>
-	                <img src="" alt="" data-name="cover">
-	            </figure>
-
-	            <p data-name="plot"></p>
-                
-                <p><a href="" data-name="readMore">Read More</a></p>
-                
-            </article>
-	    </section>
+						<figure>
+							<img alt="Film cover" data-name="cover">
+						</figure>
+						
+						<div>
+							<ul data-name="genres">
+								<li>
+									<a data-name="genre"></a>
+								</li>
+							</ul>
+						</div>
+						<p data-name="plot"></p>
+						
+						<p><a href="" data-name="readMore">Read More</a></p>
+						
+					</article>
+				</section>
+				
                 <section class="section" id="detail">
                     <h1 data-bind="title"></h1>
                         <header>
@@ -54,7 +72,15 @@
 	            <figure>
 	                <img src="" alt="" data-name="cover">
 	            </figure>
-
+				
+				<div>
+					<ul data-name="genres">
+						<li>
+							<a data-name="genre"></a>
+						</li>
+					</ul>
+				</div>
+				
 	            <p data-name="plot"></p>
                 
                 <h2>Directors:</h2>
@@ -85,12 +111,6 @@
 				<ul>
 					<li><a href="#about">About</a></li>
 					<li><a href="#movies">Movies</a></li>
-                        <h2>Genre:</h2>
-                        <ul>
-                            <li><a href="#movies/genre/Horror">Horror</a></li>
-                            <li><a href="#movies/genre/Drama">Drama</a></li>
-                            <li><a href="#movies/genre/Thriller">Thriller</a></li>
-                        </ul>
 				</ul>
 			</nav>
 		</header>
@@ -99,6 +119,7 @@
 		<script src="static/js/vendor/transparency.min.js"></script>
 		<script src="static/js/vendor/routie.js"></script>
 		<script src="static/js/vendor/underscore-min.js"></script>
+		<script src="static/js/vendor/hammer.min.js"></script>
 		<script src="static/js/app.js"></script>
     </body>
 </html>

@@ -1,16 +1,264 @@
-body > header {
-	position:absolute;
-	top:0;
+body {
+	font-family: helvetica;
 }
 
-#content{
-	margin-top:12em;
+/* Default settings */
+	h1 {
+		font-size: 150%;
+	}
+
+	h2 {
+		font-size: 120%;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	p {
+		line-height: 1.4em;
+	}
+
+	/* Toggle */
+	.active{
+		display: block;
+	}
+
+/* Navigation header */
+	body > header {
+		position:fixed;
+		top:0;
+		left: 0;
+		width: 100%;
+        height:auto;
+		height: inherit;
+		background: #F86D5F;
+        background-image:url(../images/menu.png);
+        background-repeat: no-repeat;
+        background-size:5% 100%;
+        background-position: right;
+	}
+	body > header nav {
+		padding: .45em 1.2em;
+		margin: 0;
+	}
+	body > header ul {
+		list-style-type: none;
+		padding:0;
+	}
+	body > header ul li {
+		display: inline;
+		margin: 0 .4em 0 0;
+
+	}
+	body > header ul li a {
+		color: #fff;
+		background: #E14743;
+		font-size: 115%;
+		letter-spacing: .05em;
+		padding: .8em 1em;
+		/*padding: 0 .7em .3em .7em;*/
+		/*border-bottom: 3px solid #fff;*/
+	}
+
+main {
+	margin-top: 5.5em;
 }
 
-section{
+section {
 	display: none;
+	padding: 0 .8em;
 }
 
-.active{
-	display: block;
+
+/* Movies */
+
+	section:nth-of-type(2) article {
+		border-bottom: 1px solid #bbb;
+		margin-bottom: 2em; 
+	}
+
+	/* movies / movie detail */
+	section:nth-of-type(n+2) article header h1 {
+		margin: 0 0 .6em 0;
+	}
+	
+	/* Cover */
+		figure {
+			margin: 1em 0 0 0;
+		}
+		
+		section#movies figure img {
+			height: 19.813em;
+		}
+
+	/* Plot */
+		section article > p[data-name="plot"]{
+		    overflow: hidden;
+		    height: 4em;
+			display: -webkit-box;
+		   	-webkit-line-clamp: 3;
+		  	-webkit-box-orient: vertical;
+		   	text-overflow: ellipsis;
+		}
+
+	/* Genre on movie */
+		section article > div:first-of-type ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 1.8em 0;
+		}
+		section article > div:first-of-type ul li {
+			display: inline;
+			margin: 0 .2em 0 0;
+		}
+		section article > div:first-of-type ul li a {
+			color: #34495E;
+			background: #E3E6E6;
+			font-weight: bold;
+			padding: .8em 1em;
+		}
+		section article > div:first-of-type ul li a:hover, 
+		section article > div:first-of-type ul li a:active  {
+			color: #34495E;
+			background: #D2D6D6;
+		}
+
+
+	/* 
+		Genre filter:;
+		After Gerne is rendered on every movie,
+		hide each Gerne after the first time it's Renderd.
+		(Solving this problem soon)
+	*/
+
+		.genre-filter:nth-of-type(n+2) {
+			display: none;
+		}
+
+		.genre-filter {
+			position: fixed;
+			width: 10em;
+			height: 100%;
+			top: 0;
+			right: 0;
+			z-index: 1;
+		}
+			
+		.genre-filter div {
+			position: fixed;
+			background: #F9BF3B;
+			width: inherit;
+			height: inherit;
+
+			-webkit-transition: .3s ease;
+			
+		}
+		
+		.genre-filter div h2 {
+			color: tomato;
+			padding: 0 1em;
+		}
+
+		.genre-filter div ul {
+			list-style-type: none;
+			padding: 0;
+			background: #999;
+		}
+
+		.genre-filter div ul li{
+			border-bottom: 4px solid tomato;  
+			
+		}
+
+		.genre-filter div ul li a{
+			display: block;
+			width: 100%;
+			padding: .5em 0;
+			background: #b3BF3a;
+			color: #fff;
+			text-align: center;		
+		}
+		
+		/* Gesture hammer.js */
+
+			/* Genre Filter */
+				.panLeft {
+					-ms-transform: translateX(0em); /* IE 9 */
+				   	-webkit-transform: translateX(0em); /* Chrome, Safari, Opera */
+				    transform: translateX(0em);
+				}
+
+				.panRight {
+					-ms-transform: translateX(10em); /* IE 9 */
+				   	-webkit-transform: translateX(10em); /* Chrome, Safari, Opera */
+				    transform: translateX(10em);
+				}
+
+	/* Directors */
+
+	/* Actors */
+		div[data-name="actors"] {
+			display: flex;
+			flex-direction: row;
+
+			-webkit-flex-flow: row wrap;
+  			flex-flow: row wrap;
+		}
+
+		div[data-name="actors"] article {
+			
+		}
+
+		div[data-name="actors"] article ul {
+			list-style-type: none;
+			padding: 0;
+		}
+
+
+@media all and (min-width: 740px) {
+
+   	section:nth-of-type(2) article {
+		width: 47%;
+		float: left;
+	}
+
+	/* 2e row*/
+	section:nth-of-type(2) article:nth-of-type(2n) {
+		margin-left: 3%; 
+	}
+}
+
+@media all and (min-width: 1180px) {
+
+   	section:nth-of-type(2) article {
+		width: 30%;
+		float: left;
+	}
+
+	/* reset 2e row*/
+	section:nth-of-type(2) article:nth-of-type(2n) {
+		margin-left: 0%; 
+	}
+
+	/* 2e row */
+	section:nth-of-type(2) article:nth-of-type(3n-1) {
+		margin-left: 3%; 
+	}
+
+	/* 3e row */
+	section:nth-of-type(2) article:nth-of-type(3n) {
+		margin-left: 3%; 
+	}
+
+	.genre-filter {
+		width: 12em;
+	}
+
+	.panRight {
+		-ms-transform: translateX(12em); /* IE 9 */
+	   	-webkit-transform: translateX(12em); /* Chrome, Safari, Opera */
+	    transform: translateX(12em);
+	}
+
 }

@@ -9,13 +9,14 @@ var app = app || {};
 			app.config.init();
 			app.router.init();
 			app.sections.init();
+			app.gesture.init();
 		}
 	}
 
 	app.router = {
 
 		init: function() {
-			routie({
+			routie({			
 			    'about': function() {
 			    	console.log("About");
 					app.sections.toggle("about");
@@ -32,7 +33,10 @@ var app = app || {};
                 'movies/:id': function(id){
                     console.log("details page of movie " + id);
                     app.sections.movieDetail(id);
-                }
+                },
+				'*':function(){
+					app.sections.toggle("about");
+				}
                 
 			});
 		}
@@ -169,19 +173,51 @@ var app = app || {};
 
 		toggle: function(section) {
 			if (section == "about") {
+				app.hideAllSections();
 				document.querySelector('#about').classList.add('active');
-				document.querySelector('#movie').classList.remove('active');
-				document.querySelector('#movies').classList.remove('active');
 			} 
 			else if (section == "movies") {
-				document.querySelector('#movie').classList.add('active');
+				app.hideAllSections();
 				document.querySelector('#movies').classList.add('active');
-				document.querySelector('#about').classList.remove('active');
+			}
+			
+			else{
+				app.hideAllSections();
+				document.querySelector('#about').classList.add('active');
 			}
 		}
 
 	}
     
+	app.gesture = {
+		init: function() {
+			app.gesture.genreFilter();
+		}, 
+		
+		genreFilter:function(){
+			var movieSection = document.getElementsByClassName('genre-filter')[0];
+
+			// create a simple instance
+			// by default, it only adds horizontal recognizers
+			var mc = new Hammer(movieSection);
+			
+			var panFilter = document.getElementById('pan-filter');
+			
+			document.getElementById('pan-filter').classList.add('panRight');
+			
+			mc.on("panleft", function(ev){
+				panFilter.classList.add('panLeft');
+				panFilter.classList.remove('panRight');
+			});
+			
+			mc.on("panright", function(ev){
+				panFilter.classList.remove('panLeft');
+				panFilter.classList.add('panRight');
+			});
+		}
+		
+	}
+	
 	app.config = {
 		init: function() {
             this.transparency();
@@ -214,6 +250,18 @@ var app = app || {};
                     return '#movies/' + this.id;
                 }
             },
+			
+			genres:{
+				genre:{
+					href:function(){
+						return "#movies/genre/" + this.value;
+					},
+					text: function(){
+						return this.value;
+					}
+				}
+			},
+			
             actors:{
                 url_profile: {
                     href: function(params) {
@@ -225,7 +273,12 @@ var app = app || {};
                     href:function(params) {
                         return this.url_character;
                     }                        
-                }
+                },
+                url_photo: {
+			        src: function(params) {
+			      	  return this.url_photo;
+			        }
+		  	    }
             }
 		},
 
@@ -254,4 +307,14 @@ var app = app || {};
 
 })();
 
-app.controller.init();
+var image = document.createElement('img');
+image.setAttribute('src', 'static/images/ajax-loader.gif');
+document.getElementsByTagName('body')[0].appendChild(image);
+
+setTimeout(
+	function(){
+		image.parentNode.removeChild(image);
+		app.controller.init();
+	}, 10);
+
+//app.controller.init();
