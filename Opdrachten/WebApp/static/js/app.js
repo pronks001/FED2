@@ -1,41 +1,44 @@
 // NameSpace of Module pattern
-var app = app || {};
+var appCmd = appCmd || {};
 
 // Self Invoking Anonymous Function
 (function(){
 
-	app.controller = {
+//Make an object named controller. (is controller nu een property of moeten we het zien als een los object.)
+	appCmd.controller = {
 		init: function(){
-			app.config.init();
-			app.router.init();
-			app.sections.init();
-			app.gesture.init();
+			appCmd.config.init();
+			appCmd.router.init();
+			appCmd.sections.init();
+			appCmd.gesture.init();
 		}
 	}
 
-	app.router = {
+//make an object named router.
+	appCmd.router = {
 
 		init: function() {
+			//routie checks the link after hash == # to see what it needs to run.
 			routie({			
 			    'about': function() {
 			    	console.log("About");
-					app.sections.toggle("about");
+					appCmd.sections.toggle("about");
 			    },
 			    'movies': function() {
 			    	console.log("Movies");
-					app.sections.movies();
+					appCmd.sections.movies();
 			    },
                 'movies/genre/:genre':function(genre){
                     console.log("Genre: " + genre);
-                    app.sections.moviesByGenre(genre);
+                    appCmd.sections.moviesByGenre(genre);
                 },
                 
                 'movies/:id': function(id){
                     console.log("details page of movie " + id);
-                    app.sections.movieDetail(id);
+                    appCmd.sections.movieDetail(id);
                 },
 				'*':function(){
-					app.sections.toggle("about");
+					appCmd.sections.toggle("about");
 				}
                 
 			});
@@ -43,7 +46,8 @@ var app = app || {};
 
 	}
 
-	app.content = {
+//make an object named skeleton. The content that needs to be rendered is stored here.
+	appCmd.skeleton = {
 
 		about: {
 			title: "About this app",
@@ -69,85 +73,82 @@ var app = app || {};
 		movies: {},
 	}
     
-    app.hideAllSections = function() {
+//make a methode called appCmd.hideAllSections. This function removes the class 'active' from every section.
+    appCmd.hideAllSections = function() {
         _.each(document.getElementsByClassName("section"), function(el){
             el.classList.remove('active'); 
         });
     }
-    
-    app.manipulatieData =  {
-            reviewData: function() {
-                console.log("manipulate review scores")
-                // get data
-                var data = JSON.parse(localStorage.getItem('films'));
-                //map reduce
-                _.map(data, function (movie, i) {
-                        movie.reviews = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
 
-                console.log(movie.reviews)
-                return movie;
-                })  
-        app.content.movies = data;
-        console.log(app.content.movies)
-        return data;
-         
+//make an object named reviews.   
+    appCmd.reviews =  {
+        //make a methode called avarage which calculates the avarage score of the reviews that a movie has.
+        average: function() {
+            console.log("manipulate review scores")
+            // get data
+            var data = JSON.parse(localStorage.getItem('films'));
+            //_.map produces a new array and fills this with the movies.
+            _.map(data, function (movie, i) {
+            		//_.reduce extracts the movie.reviews and takes the score. It ads the scores up and parts them by the amount of reviews.
+                    movie.reviews = _.reduce(movie.reviews,   function(memo, review){   return memo + review.score; }, 0) / movie.reviews.length;
+
+            console.log(movie.reviews)
+            return movie;
+            })  
+        appCmd.skeleton.movies = data;
+        console.log(appCmd.skeleton.movies)
+        return data; 
         }
     }
 
-	app.sections = {
+//make an object named sections.
+	appCmd.sections = {
 
 		init: function() {
-            app.manipulatieData.reviewData();
-			app.sections.about();
-			app.sections.movies();
-			app.sections.toggle();
+            appCmd.reviews.average();
+			this.about();
+			this.movies();
+			this.toggle(); 
 			
 		},
 
 		about: function() {
-			app.hideAllSections();
-            Transparency.render(document.getElementById('about'), app.content.about);
+			appCmd.hideAllSections();
+            Transparency.render(document.getElementById('about'), appCmd.skeleton.about);
 		},
 
 		movies: function() {
-			app.hideAllSections();
+			appCmd.hideAllSections();
             var self = this;
 
             document.getElementById('movies').classList.add('active');
             
 			if(localStorage.getItem('films')){
-				Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
-				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+				Transparency.render(document.getElementById('movies'), appCmd.skeleton.movies, appCmd.config.directives);
 			}
 			else{
-				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
+				appCmd.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
 
 			}
-
-			
-
-
-
 		},
 
 		moviesSucces: function(text) {
-            app.hideAllSections();
+            appCmd.hideAllSections();
 			console.log('Parsed data', JSON.parse(text));
-			app.content.movies = JSON.parse(text);
-			console.log('Data from data object', app.content.movies);
+			appCmd.skeleton.movies = JSON.parse(text);
+			console.log('Data from data object', appCmd.skeleton.movies);
 
-			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
-			Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+			Transparency.render(document.getElementById('movies'), appCmd.skeleton.movies, appCmd.config.directives);
 
 			localStorage.setItem('films', text);
 		},
         
         moviesByGenre:function(genre){
-            app.hideAllSections();
+            appCmd.hideAllSections();
             document.getElementById('movies').classList.add('active');
             
-            var movies = app.content.movies;
-            
+            var movies = appCmd.skeleton.movies;
+            //_.filter loop through the movies and returns a value true if the genre matches the genre its looking for. It then returns all the movies wich say true.
             var filteredMovies = _.filter(movies, function(movie){
                 for(var i=0; i<movie.genres.length; i++){
                     if(movie.genres[i] == genre) return true;
@@ -155,45 +156,47 @@ var app = app || {};
                 return false;
             });
             
-            Transparency.render(document.getElementById('movies'), filteredMovies, app.config.directives);
+            Transparency.render(document.getElementById('movies'), filteredMovies, appCmd.config.directives);
         },
         
         movieDetail: function(id){
-            app.hideAllSections();
+            appCmd.hideAllSections();
             
-            var movies = app.content.movies;
+            var movies = appCmd.skeleton.movies;
             
             id = parseInt(id);
-            
+            //_.findWhere searches through the movie array to find the id. When it finds the id it returns the movie with the id it found.
             var movie = _.findWhere(movies, {id: id});
             console.log(movie);
             document.getElementById('detail').classList.add('active');
-            Transparency.render(document.getElementById('detail'), movie, app.config.directives);
+            Transparency.render(document.getElementById('detail'), movie, appCmd.config.directives);
         },
 
 		toggle: function(section) {
 			if (section == "about") {
-				app.hideAllSections();
+				appCmd.hideAllSections();
 				document.querySelector('#about').classList.add('active');
 			} 
 			else if (section == "movies") {
-				app.hideAllSections();
+				appCmd.hideAllSections();
 				document.querySelector('#movies').classList.add('active');
 			}
 			
 			else{
-				app.hideAllSections();
+				appCmd.hideAllSections();
 				document.querySelector('#about').classList.add('active');
 			}
 		}
 
 	}
-    
-	app.gesture = {
+
+//make an object named gesture.
+	appCmd.gesture = {
 		init: function() {
-			app.gesture.genreFilter();
+			this.genreFilter();
 		}, 
 		
+		//make a filter that checks if the gesture(swipe) is being performed, if it is.. it adds a class to the element.
 		genreFilter:function(){
 			var movieSection = document.getElementsByClassName('genre-filter')[0];
 
@@ -218,7 +221,8 @@ var app = app || {};
 		
 	}
 	
-	app.config = {
+//make an object named config.
+	appCmd.config = {
 		init: function() {
             this.transparency();
         },
@@ -230,6 +234,7 @@ var app = app || {};
             };
         },
 
+       //Directives holds all settings to fixing the directives it needs to load.
 		directives: {
 			cover: {
 			    src: function(params) {
@@ -314,7 +319,5 @@ document.getElementsByTagName('body')[0].appendChild(image);
 setTimeout(
 	function(){
 		image.parentNode.removeChild(image);
-		app.controller.init();
-	}, 10);
-
-//app.controller.init();
+		appCmd.controller.init();
+	}, 2000);
